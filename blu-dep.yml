@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-blue
+  labels:
+    app: nginx
+    env: blue
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+      env: blue
+  template:
+    metadata:
+      labels:
+        app: nginx
+        env: blue
+    spec:
+      containers:
+      - name: nxctr
+        image: nginx:ctrname
+        ports:
+        - containerPort: 80
+         
+        # resources:
+        #   limits:
+        #     memory: "50M"
+        #     cpu: "0.25"

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-green
+  labels:
+    app: nginx
+    env: green
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+      env: green
+  template:
+    metadata:
+      labels:
+        app: nginx
+        env: green
+    spec:
+      containers:
+      - name: nxctr
+        image: nginx:ctrname
+        ports:
+        - containerPort: 80
+        # resources:
+        #   limits:
+        #     memory: "50M"
+        #     cpu: "0.25"
