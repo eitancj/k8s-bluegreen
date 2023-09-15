@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: nxctr
-        image: nginx:ctrname
+        image: nginx:bluegreen
         ports:
         - containerPort: 80
         # resources:
