@@ -6,9 +6,9 @@ spec:
   selector:
     app: nginx
   ports:
-  - name: http
-    port: 8080 # svc port
-    targetPort: 80 # container port
-    nodePort: 32123 # node port
-    protocol: TCP
+    - name: http
+      port: 8080 # svc port
+      targetPort: 80 # ep port
+      nodePort: 32123 # node port
+      protocol: TCP
   type: NodePort

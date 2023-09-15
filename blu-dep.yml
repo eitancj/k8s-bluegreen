@@ -18,12 +18,14 @@ spec:
         env: blue
     spec:
       containers:
-      - name: nxctr
-        image: nginx:bluegreen
-        ports:
-        - containerPort: 80
-         
-        # resources:
-        #   limits:
-        #     memory: "50M"
-        #     cpu: "0.25"
+        - name: nxctr
+          image: nginx:bluegreen
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              memory: "32Mi"
+              cpu: "0.2"
+            limits:
+              memory: "64Mi"
+              cpu: "0.25"
