@@ -1,9 +1,9 @@
 # Blue-Green Deployment on Kubernetes
 
-![](https://github.com/eitancj/preview_images/blob/main/loancalc_cli_2_en.png?raw=true)
+![](https://github.com/eitancj/preview_images/blob/main/bluegreen.png?raw=true)
 
 \
-Practice blue-green deployment of a simple app on your local machine using Docker Desktop.
+Practice blue-green deployment of a simple web app on your local machine using Docker Desktop.
 
 ### Tested Tech Stack
 - nginx 1.25.2 on Alpine 3.18-slim
@@ -89,22 +89,15 @@ watch curl http://localhost:32123
     Bypass the service selector and verify that the green pods are running app version 1.0.\
     Run this:
 ```sh
-GREENPOD=$(kubectl get pod -n blue-green --selector 'env=green' --output=jsonpath={.items..metadata.name} | cut -d ' ' -f1)
-
-kubectl expose pod $GREENPOD -n blue-green --type NodePort --target-port 80
-
-GREENPORT=$(kubectl get svc $GREENPOD -n blue-green | tail -1 | awk '{print $5}' | awk -F ':' '{print $2}' | awk -F '/' '{print $1}')
-
-sleep 1s
-
-open http://localhost:$GREENPORT
+chmod u+x ./expose_green.sh
+. ./expose_green.sh
 ```
 > You should see a green 1.0 pod displayed in your browser.  
 
 \
 Now delete the temporary service we've just created, and let's move on.
 ```sh
-kubectl delete svc $GREENPOD -n blue-green && unset GREENPOD && unset GREENPORT
+kubectl delete svc $GREENPOD -n blue-green
 ```
 
 \
@@ -131,15 +124,7 @@ kubectl apply -f grn-dep.yml -n blue-green
 13. Test the new version of the app before we direct users there.\
     In this practice case, we'll settle for browser testing like we did earlier.
 ```sh
-GREENPOD=$(kubectl get pod -n blue-green --selector 'env=green' --output=jsonpath={.items..metadata.name} | cut -d ' ' -f1)
-
-kubectl expose pod $GREENPOD -n blue-green --type NodePort --target-port 80
-
-GREENPORT=$(kubectl get svc $GREENPOD -n blue-green | tail -1 | awk '{print $5}' | awk -F ':' '{print $2}' | awk -F '/' '{print $1}')
-
-sleep 1s
-
-open http://localhost:$GREENPORT
+. ./expose_green.sh
 ```
 > You should now see a green *2.0* pod displayed in your browser.  
 
@@ -187,9 +172,12 @@ watch curl http://localhost:32123
 ```sh
 # change 'green' to 'blue' in the service's yaml file
 grep 'env:' blugrn-svc.yml | awk -F '#' '{print $1 " <--before"}' | xargs
+
 sed -i'.orig' 's/green/blue/' blugrn-svc.yml && rm blugrn-svc.yml.orig
 # # get rid of the '.orig' parts if your version of sed doesn't require it
+
 grep 'env:' blugrn-svc.yml | awk -F '#' '{print $1 " <--after"}' | xargs
+
 
 # apply changes — revert back to the blue world with the old version of the app
 kubectl apply -f blugrn-svc.yml -n blue-green
@@ -208,7 +196,7 @@ watch curl http://localhost:32123
 > We'll need to investigate why this happened, and perhaps implement more strenuous CI/CD pipeline testing before attempting the update again.
 
 \
-19.  That's it! Let's get your machine back to the way it was, cleanup time.
+19. That's it! Let's get your machine back to the way it was, cleanup time.
 
 
 ### Cleanup

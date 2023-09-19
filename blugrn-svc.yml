@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: bgdeploy
-    env: blue # change to 'green' in order to redirect requests to the new app version
+    env: blue # change to 'blue' in order to redirect requests to the new app version
   ports:
     - name: http
       port: 8080 # svc port
