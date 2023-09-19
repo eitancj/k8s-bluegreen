@@ -1,5 +1,5 @@
 # Blue-Green Deployment on Kubernetes
-
+\
 ![](https://github.com/eitancj/preview_images/blob/main/bluegreen.png?raw=true)
 
 \
@@ -27,7 +27,6 @@ kubectl create namespace blue-green
 2. Review the blue deployment yaml. Note how the app version is 1.0.\
    This is the stable version of our app - the BLUE version.
 
-\
 \
 3. Build the app images. It should output two new images, tagged 1.0 and 2.0. 
 ```sh
@@ -63,11 +62,9 @@ watch curl http://localhost:32123
 > Hard-refreshing the page (or waiting 2 secs in *watch*) should alternate between two container hostnames, both of which should be blue at this point.
 
 \
-\
 7. Review the green deployment yaml.\
    It should be identical to the blue deployment, same image, only green in the labels.
 
-\
 \
 8. Deploy the green stand-by.
 ```sh
@@ -113,7 +110,6 @@ grep 'image:' grn-dep.yml | awk -F '#' '{print $1 " <--after"}' | xargs
 ```
 > You can of course do this manually by editing the yaml file.
 
-\
 \
 12. Since no requests are being directed to the green world, we should be able to deploy the new app there without affecting our stable blue world (given a robust & agile infrastructure).
 ```sh
