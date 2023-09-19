@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-green
+  name: bgdeploy-green
   labels:
-    app: nginx
+    app: bgdeploy
     env: green
 spec:
-  replicas: 6
+  replicas: 2
   selector:
     matchLabels:
-      app: nginx
+      app: bgdeploy
       env: green
   template:
     metadata:
       labels:
-        app: nginx
+        app: bgdeploy
         env: green
     spec:
       containers:
-        - name: nxctr
-          image: nginx:bluegreen
+        - name: bgd-ctr
+          image: bgdeploy:2.0 # update image to the new app version
           ports:
             - containerPort: 80
           resources:
