@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: bgd-ctr
-          image: bgdeploy:2.0 # update image to the new app version
+          image: bgdeploy:1.0 # update image to the new app version
           ports:
             - containerPort: 80
           resources:

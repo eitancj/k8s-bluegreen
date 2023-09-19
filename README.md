@@ -24,7 +24,7 @@ Practice blue-green deployment of a simple web app on your local machine using D
 kubectl create namespace blue-green
 ```
 \
-2. Review the blue deployment yaml. Note how the app version is 1.0.\
+2. Review the blue deployment 'blu-dep.yml'. Note how the image points to app version 1.0.\
    This is the stable version of our app - the BLUE version.
 
 \
@@ -41,7 +41,7 @@ kubectl apply -f blu-dep.yml -n blue-green
 ```
 
 \
-5. Review the Service yaml; note how it points to the blue pods only.\
+5. Review the Service config 'blugrn-svc.yml'; note how it points to the blue pods only.\
    Deploy it.
 ```sh
 kubectl apply -f blugrn-svc.yml -n blue-green
@@ -62,7 +62,7 @@ watch curl http://localhost:32123
 > Hard-refreshing the page (or waiting 2 secs in *watch*) should alternate between two container hostnames, both of which should be blue at this point.
 
 \
-7. Review the green deployment yaml.\
+7. Review the green deployment 'grn-dep.yml'.\
    It should be identical to the blue deployment, same image, only green in the labels.
 
 \
@@ -99,7 +99,7 @@ kubectl delete svc $GREENPOD -n blue-green
 
 \
 11.  So we have a service that points to our blue deployment, and a green deployment in stand-by.\
-    Let's upgrade the green pods to version 2.0 of our app by changing a single line in the green deployment yaml.
+    Let's upgrade the green pods to version 2.0 of our app by changing a single line in the deployment yaml.
 ```sh
 grep 'image:' grn-dep.yml | awk -F '#' '{print $1 " <--before"}' | xargs
 
@@ -162,7 +162,7 @@ watch curl http://localhost:32123
 17.  Alright! All new connections are now using the latest version of our app.\
     But WAIT! there's a problem. Something's not working right for some of the users. SHIT.\
     But why? we tested the new version and deployed it to an identical environment!\
-    Who knows; always expect the unexpected when it comes to I.T.\
+    Well, that's a question to be delt with later – first get the app up and running again.\
     \
     Let's implement one of the best features of blue-green deployments – swift rollbacks.
 ```sh
@@ -180,7 +180,7 @@ kubectl apply -f blugrn-svc.yml -n blue-green
 ```
 
 \
-18. Quick, test your main app at 32123!\
+18. Test the app again.\
    Should have now gone back to blue and 1.0.
 ```sh
 http://localhost:32123
@@ -192,7 +192,7 @@ watch curl http://localhost:32123
 > We'll need to investigate why this happened, and perhaps implement more strenuous CI/CD pipeline testing before attempting the update again.
 
 \
-19. That's it! Let's get your machine back to the way it was, cleanup time.
+19. That's it! Let's clean up some, get your machine back to the way it was.
 
 
 ### Cleanup
@@ -200,11 +200,13 @@ watch curl http://localhost:32123
 ```sh
 kubectl delete ns blue-green
 ```
-2. Remove the docker images we've created at the beginning of our session.
+2. Remove the docker images we've created at the beginning of the session.
 ```sh
 docker rmi bgdeploy:1.0 bgdeploy:2.0
 ```
-3. Thanks for your time.
+3. Delete cloned repo if you wish.
+
+4. Thanks for your time.
 
 
 ### Notes
